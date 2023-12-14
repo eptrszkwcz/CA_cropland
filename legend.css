@@ -1,0 +1,91 @@
+h1 {
+    font-size: 20px;
+    line-height: 30px;
+    color: #d6dfff;
+    /* color: #eeff00; */
+  }
+  
+  h2 {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 10px;
+    color: #d6dfff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #2dc4b2;
+  }
+  
+  p {
+    color: #728be6;
+    font-size: 14px;
+  }
+  
+  .dot {
+    height: 8px;
+    width: 8px;
+    background-color: rgb(255, 10, 206);
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+  }
+  
+  .dotlable {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    color: #d6dfff;
+  }
+
+  .hr-lines{
+    height: 2px;
+    width: 15px;
+    background: rgb(0, 255, 251);
+    display: inline-block;
+  }
+
+  .hr-square{
+    height: 12px;
+    width: 12px;
+    background: rgb(0, 255, 251);
+    display: inline-block;
+  }
+  
+  #console {
+    position: absolute;
+    width: 240px;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: rgba(72, 72, 72, 0.9);
+    /* opacity: 0.8; */
+  }
+  
+  .session {
+    /* height: 12px; */
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .row {
+    height: 12px;
+    width: 100%;
+  }
+  
+  .colors {
+    background: linear-gradient(to right,#4287f5, #25dbdb, #00ff04);
+    margin-bottom: 5px;
+  }
+  
+  .label {
+    width: 8%;
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
+    color: #728be6;
+  }
+  

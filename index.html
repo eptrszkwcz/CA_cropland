@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello Friend</title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<link href="legend.css" rel="stylesheet" type="text/css">  
+<link href="popup.css" rel="stylesheet" type="text/css">  
+
+
+<style>
+
+body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;}
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<!-- LEGEND -->
+
+<div id='console'>
+    <h1>Agricultural Census 2021 Palo Verde Valley, CA</h1>
+    <p>California's Palo Verde Valley is on of the most arid aricultural regions in the United State. 
+        Irrigated exclusively by the Colorado River, the valley competes for river's limited supply.</p>
+    <br>
+
+    <!-- <div class='session'>
+      <h2>Number of Infections</h2>
+      <div class='row colors' >
+      </div>
+      <div class='row labels'>
+        <div class='label'>0</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>100</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>200</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>300</div>
+      </div>
+    </div> -->
+
+    <div class='session'>
+      <span class="hr-square" style="background: #efee3e;"></span><span class="dotlable">Citrus</span>
+    </div>
+    <div class ='session'> 
+      <span class="hr-square" style="background: #6abbc2;"></span><span class="dotlable">Field Crops</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #4ff08b;"></span><span class="dotlable">Grain</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #a6ff96;"></span><span class="dotlable">Prarie Crops</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #23c79a;"></span><span class="dotlable">Truck Crops & Berries</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #dbd1d1;"></span><span class="dotlable">Idle Field</span>
+    </div>
+      
+    
+  </div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoicHRyc3prd2N6IiwiYSI6ImNscGkxOHVvbjA2eW8ybG80NDJ3ajBtMWwifQ.L2qe-aJO35nls3sfd0WKPA';
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    // style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    style: 'mapbox://styles/ptrszkwcz/clq2frznh00cp01qmb1vce1kl',
+    center: [-114.64222994003272, 33.55], // starting position [lng, lat]
+    zoom: 10.3 // starting zoom
+});
+
+// Dont forget this part for Hover!
+let hoveredPolygonId = null;
+
+map.on('load', () => {
+
+    // Add Source and Layer
+    map.addSource('orang', {
+        'type': 'vector',
+        'url': "mapbox://ptrszkwcz.4j722bsj",
+        // Because mapbox fucks up when assigning IDs, make own IDs in QGIS and then set here!!!
+        'promoteId':'UniqueID'
+    });
+
+    map.addLayer({
+        'id': 'orang-points',
+        'type': 'fill',
+        'source': 'orang', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'fill-color': [ 'match', ['get','SYMB_CLASS'],
+                'C', '#efee3e',
+                'F', '#6abbc2',
+                'G', '#4ff08b',
+                'I', '#dbd1d1',
+                'P', '#a6ff96',
+                'T', '#23c79a',
+                '#000000'
+                ], 
+                'fill-opacity': 0.95,
+            // 'circle-stroke-width': [ 'case', 
+            //     ['boolean', ['feature-state', 'hover'], false], 2, 0]
+            }
+    });
+
+    map.addLayer({
+        'id': 'orang-stroke',
+        'type': 'line',
+        'source': 'orang', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'line-color': [ 'case', 
+                ['boolean', ['feature-state', 'hover'], false], '#f803fc', '#636363'],
+            'line-width': [ 'case', 
+                ['boolean', ['feature-state', 'hover'], false], 2.5, 0.25],
+        }
+    }); 
+
+    
+
+    // POPUP ON CLICK !!
+
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+    });
+
+    map.on('click', 'orang-points', (e) => {
+        new mapboxgl.Popup()
+        feature = e.features[0]
+        let acreage_long = feature.properties.ACRES
+        let acreage = acreage_long.toFixed(2)
+        // console.log(e.features[0])
+        popup.setLngLat(e.lngLat)
+        .setHTML(`<poptit>
+                    Farm ID: ${feature.properties.UniqueID}
+                    </poptit>
+                <div class = "pop-lines"></div>
+                <div class = "pop-session">
+                  <left>Crop</left><right>${feature.properties.crop_name}</right>
+                </div>
+                <div class = "pop-session">
+                    <left>Acreage</left><right>${acreage}</right>
+                </div>
+                <div class = "pop-session">
+                    <left>Plantings</left><right>${feature.properties.Multi}</right>
+                </div>
+                  `)
+        .addTo(map);
+    });
+    
+    // Change the cursor to a pointer when the mouse is over the states layer.
+    map.on('mouseenter', 'orang-points', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    
+    // Change the cursor back to a pointer when it leaves the states layer.
+    map.on('mouseleave', 'orang-points', () => {
+        map.getCanvas().style.cursor = '';
+    });
+
+    // HIGHLIGHT ON HOVER !!
+
+    map.on('mousemove', 'orang-points', (e) => {
+        if (e.features.length > 0) {
+
+            if (hoveredPolygonId !== null) {
+                map.setFeatureState(
+                    { source: 'orang', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                    { hover: false }
+                    );
+            }
+
+            hoveredPolygonId = e.features[0].id;
+            // hoveredPolygonId = e.features[0].properties.featID;
+
+            map.setFeatureState(
+                { source: 'orang', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                { hover: true }
+            );
+        }
+    });
+        
+    // When the mouse leaves the state-fill layer, update the feature state of the
+    map.on('mouseleave', 'orang-points', () => {
+        if (hoveredPolygonId !== null) {
+            map.setFeatureState(
+                { source: 'orang', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                { hover: false }
+            );
+        }
+        hoveredPolygonId = null;
+    });
+
+});
+
+
+</script>
+ 
+</body>
+</html> 

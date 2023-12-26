@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello Friend</title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<link href="legend.css" rel="stylesheet" type="text/css">  
+<link href="popup.css" rel="stylesheet" type="text/css">  
+<link href="var.css" rel="stylesheet" type="text/css"> 
+
+
+<style>
+
+body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;}
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<!-- LEGEND -->
+
+<div id='console'>
+    <h1>Agricultural Census 2021 Palo Verde Valley, CA</h1>
+    <p>California's Palo Verde Valley is on of the most arid aricultural regions in the United State. 
+        Irrigated exclusively by the Colorado River, the valley competes for river's limited supply.</p>
+    <div class = "leg-lines"></div>
+    <!-- <br> -->
+
+    <!-- <div class='session'>
+      <h2>Number of Infections</h2>
+      <div class='row colors' >
+      </div>
+      <div class='row labels'>
+        <div class='label'>0</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>100</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>200</div>
+        <div class='label'></div>
+        <div class='label'></div>
+        <div class='label'>300</div>
+      </div>
+    </div> -->
+    <div class = "legendtit">Main Crop</div>
+
+    <div class='session'>
+      <span class="hr-square" style="background: #efee3e;"></span><span class="dotlable">Citrus</span>
+    </div>
+    <div class ='session'> 
+      <span class="hr-square" style="background: #6abbc2;"></span><span class="dotlable">Field Crops</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #4ff08b;"></span><span class="dotlable">Grain</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #a6ff96;"></span><span class="dotlable">Prarie Crops</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #23c79a;"></span><span class="dotlable">Truck Crops & Berries</span>
+    </div>
+    <div class ='session'> 
+        <span class="hr-square" style="background: #dbd1d1;"></span><span class="dotlable">Idle Field</span>
+    </div>
+      
+    
+  </div>
+
+<script>
+
+var cssclass = document.querySelector(":root");
+var mystyle = window.getComputedStyle(cssclass);
+
+mapboxgl.accessToken = 'pk.eyJ1IjoicHRyc3prd2N6IiwiYSI6ImNscGkxOHVvbjA2eW8ybG80NDJ3ajBtMWwifQ.L2qe-aJO35nls3sfd0WKPA';
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    // style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    style: 'mapbox://styles/ptrszkwcz/clq2frznh00cp01qmb1vce1kl',
+    center: [-114.64222994003272, 33.55], // starting position [lng, lat]
+    zoom: 10.3 // starting zoom
+});
+
+// Dont forget this part for Hover!
+let hoveredPolygonId = null;
+let clickedPolygonId = null;
+
+map.on('load', () => {
+
+    // Add Source and Layer
+    map.addSource('source-A', {
+        'type': 'vector',
+        'url': "mapbox://ptrszkwcz.4j722bsj",
+        // Because mapbox fucks up when assigning IDs, make own IDs in QGIS and then set here!!!
+        'promoteId':'UniqueID'
+    });
+
+    map.addLayer({
+        'id': 'A-PrimStyle',
+        'type': 'fill',
+        'source': 'source-A', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'fill-color': [ 'match', ['get','SYMB_CLASS'],
+                'C', '#efee3e',
+                'F', '#6abbc2',
+                'G', '#4ff08b',
+                'I', '#dbd1d1',
+                'P', '#a6ff96',
+                'T', '#23c79a',
+                '#000000'
+                ], 
+                'fill-opacity': 0.75,
+            // 'circle-stroke-width': [ 'case', 
+            //     ['boolean', ['feature-state', 'hover'], false], 2, 0]
+            }
+    });
+
+    // ADDED FOR HOVER FUNCTIONALITY
+    map.addLayer({
+        'id': 'orang-stroke',
+        'type': 'line',
+        'source': 'source-A', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'line-color': [ 'case', 
+                ['boolean', ['feature-state', 'hover'], false], mystyle.getPropertyValue("--highl_color"), '#636363'],
+            'line-width': [ 'case', 
+                ['boolean', ['feature-state', 'hover'], false], 2.5, 0.25],
+        }
+    }); 
+
+    map.addLayer({
+        'id': 'orang-fill-hover',
+        'type': 'fill',
+        'source': 'source-A', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'fill-color': mystyle.getPropertyValue("--highl_color"),
+            'fill-opacity': [ 'case', 
+                ['boolean', ['feature-state', 'hover'], false], 0.5, 0],
+        }
+    }); 
+
+    // ADDED FOR CLICK FUNCTIONALITY
+    map.addLayer({
+        'id': 'orang-stroke-click',
+        'type': 'line',
+        'source': 'source-A', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'line-color': [ 'case', 
+                ['boolean', ['feature-state', 'click'], false], mystyle.getPropertyValue("--highl_color"), '#636363'],
+            'line-width': [ 'case', 
+                ['boolean', ['feature-state', 'click'], false], 4, 0.25],
+        }
+    }); 
+
+    map.addLayer({
+        'id': 'orang-fill-click',
+        'type': 'fill',
+        'source': 'source-A', // reference the data source
+        'source-layer':'PaloVerde_final-3lrrgz',
+        'layout': {},
+        'paint': {
+            'fill-color': mystyle.getPropertyValue("--highl_color"),
+            'fill-opacity': [ 'case', 
+                ['boolean', ['feature-state', 'click'], false], 0.5, 0],
+        }
+    }); 
+
+ 
+
+    // POPUP ON CLICK !!
+
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+    });
+
+
+    // THIS FUNCTIONS FINDS THE CENTER OF A FEATURES (TO SET POPUP)
+    function getFeatureCenter(feature) {
+        let center = [];
+        let latitude = 0;
+        let longitude = 0;
+        let height = 0;
+        let coordinates = [];
+        feature.geometry.coordinates.forEach(function (c) {
+            let dupe = [];
+            if (feature.geometry.type === "MultiPolygon")
+                dupe.push(...c[0]); //deep clone to avoid modifying the original array
+            else 
+                dupe.push(...c); //deep clone to avoid modifying the original array
+            dupe.splice(-1, 1); //features in mapbox repeat the first coordinates at the end. We remove it.
+            coordinates = coordinates.concat(dupe);
+        });
+        if (feature.geometry.type === "Point") {
+            center = coordinates[0];
+        }
+        else {
+            coordinates.forEach(function (c) {
+                latitude += c[0];
+                longitude += c[1];
+            });
+            center = [latitude / coordinates.length, longitude / coordinates.length];
+        }
+
+        return center;
+    }
+
+    map.on('click', 'A-PrimStyle', (e) => {
+        new mapboxgl.Popup()
+        feature = e.features[0]
+        let acreage_long = feature.properties.ACRES
+        let acreage = acreage_long.toFixed(2)
+        popup.setLngLat(getFeatureCenter(feature))
+        // popup.setLngLat(e.lngLat)
+        .setHTML(`<poptit>
+                    Farm ID: ${feature.properties.UniqueID}
+                    </poptit>
+                <div class = "pop-lines"></div>
+                <div class = "pop-session">
+                  <left>Crop</left><right>${feature.properties.crop_name}</right>
+                </div>
+                <div class = "pop-session">
+                    <left>Acreage</left><right>${acreage}</right>
+                </div>
+                <div class = "pop-session">
+                    <left>Plantings</left><right>${feature.properties.Multi}</right>
+                </div>
+                  `)
+        .addTo(map);
+    });
+    
+    // CHANGE CLICKSTATE TO HAVE HIGHLIGHT BORDER
+    map.on('click', 'A-PrimStyle', (e) => {
+        if (e.features.length > 0) {
+            if (clickedPolygonId !== null) {
+                map.setFeatureState(
+                    { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: clickedPolygonId },
+                    { click: false }
+                    );
+            }
+
+            clickedPolygonId = e.features[0].id;
+            // hoveredPolygonId = e.features[0].properties.featID;
+
+            map.setFeatureState(
+                { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: clickedPolygonId },
+                { click: true }
+            );
+        } 
+    });
+
+    // will need to add functionality that makes it so clicking on another layer turns off highlight (not just clicking on nothing)
+    map.on('click', (e) => {
+        const features = map.queryRenderedFeatures(e.point);
+        // console.log(features)
+        if (features.length == 0) {
+            map.setFeatureState(
+                    { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: clickedPolygonId },
+                    { click: false }
+                );
+        }
+    }); 
+
+
+    // Change the cursor to a pointer when the mouse is over the states layer.
+    map.on('mouseenter', 'A-PrimStyle', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    
+    // Change the cursor back to a pointer when it leaves the states layer.
+    map.on('mouseleave', 'A-PrimStyle', () => {
+        map.getCanvas().style.cursor = '';
+    });
+
+    // HIGHLIGHT ON HOVER !!
+
+    map.on('mousemove', 'A-PrimStyle', (e) => {
+        if (e.features.length > 0) {
+
+            if (hoveredPolygonId !== null) {
+                map.setFeatureState(
+                    { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                    { hover: false }
+                    );
+            }
+
+            hoveredPolygonId = e.features[0].id;
+            // hoveredPolygonId = e.features[0].properties.featID;
+
+            map.setFeatureState(
+                { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                { hover: true }
+            );
+        }
+    });
+        
+    // When the mouse leaves the state-fill layer, update the feature state of the
+    map.on('mouseleave', 'A-PrimStyle', () => {
+        if (hoveredPolygonId !== null) {
+            map.setFeatureState(
+                { source: 'source-A', sourceLayer: 'PaloVerde_final-3lrrgz', id: hoveredPolygonId },
+                { hover: false }
+            );
+        }
+        hoveredPolygonId = null;
+    });
+
+});
+
+
+</script>
+ 
+</body>
+</html> 

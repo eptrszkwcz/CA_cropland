@@ -1,0 +1,138 @@
+#console {
+  position: absolute;
+  border-radius: 3px;
+  width: 240px;
+  margin: 15px;
+  padding: 10px 20px;
+  background-color: var(--bg_color);
+  /* opacity: 0.8; */
+}
+
+h1 {
+    font-size: 20px;
+    line-height: 30px;
+    color: var(--prim_color);
+  }
+  
+  h2 {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 10px;
+    color: #d6dfff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #2dc4b2;
+  }
+  
+  p {
+    color: var(--sec_color);
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .legendtit {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--prim_color);
+    margin-bottom: 15px;
+  }
+  
+  .dot {
+    height: 8px;
+    width: 8px;
+    background-color: var(--ter_color);
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+  }
+
+  .dot.checked {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+  }
+  
+  .dotlable {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    /* color: var(--prim_color); */
+  }
+
+  .checkmark {
+    margin-right: 10px;
+    font-weight: 100;
+    float: right;
+    /* color: var(--prim_color); */
+  }
+
+  .hr-lines{
+    height: 2px;
+    width: 15px;
+    background: rgb(0, 255, 251);
+    display: inline-block;
+  }
+
+  .hr-square.checked{
+    height: 12px;
+    width: 12px;
+    display: inline-block;
+  }
+
+  .hr-square{
+    height: 12px;
+    width: 12px;
+    background: var(--ter_color);
+    display: inline-block;
+  }
+  
+  .session {
+    /* height: 12px; */
+    width: 100%;
+    margin-bottom: 15px;
+    color: var(--ter_color);
+  }
+
+  .session.checked {
+    /* height: 12px; */
+    width: 100%;
+    margin-bottom: 15px;
+    color: var(--prim_color);
+  }
+  
+  .row {
+    height: 12px;
+    width: 100%;
+  }
+  
+  .colors {
+    background: linear-gradient(to right,#4287f5, #25dbdb, #00ff04);
+    margin-bottom: 5px;
+  }
+  
+  .label {
+    width: 8%;
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
+    color: var(--prim_color);
+  }
+
+  .leg-lines{
+    height: 1px;
+    width: 100%;
+    background: var(--sec_color);
+    margin: auto;
+    margin-bottom: 26px;
+  }
+  

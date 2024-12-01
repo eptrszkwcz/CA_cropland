@@ -18,8 +18,10 @@ const map = new mapboxgl.Map({
 let hoveredPolygonId = null;
 let clickedPolygonId = null;
 
+// const cats = ['Citrus','Field Crops','Grain','Idle','Prarie Crops','Truck Crops & Berries'];
 const cats = ['C','F','G','I','P','T'];
-const cat_labels = ['Citrus','Field Crops','Grain','Idle','Prarie Crops','Truck Crops & Berries'];
+
+// const cat_labels = ['Citrus','Field Crops','Grain','Idle','Prarie Crops','Truck Crops & Berries'];
 var filter_cats = [];
 
 map.on('load', () => {
@@ -244,35 +246,40 @@ map.on('load', () => {
         hoveredPolygonId = null;
     });
 
-
     // CLICK TO FILTER (INTEGRATED INTO LEGEND) ---------------------------------------------------------------
+
     for (let i = 0; i < cats.length; i++) {
 
         const hash = "#"
         const ID_name = hash.concat(cats[i])
-        console.log(ID_name)
 
         const sessionDiv = document.querySelector(ID_name);
 
-        console.log(sessionDiv)
+        // console.log(sessionDiv)
 
         sessionDiv.addEventListener('click', (e) => {
-            console.log(e.srcElement)
+
+            let parent_element = sessionDiv.parentElement.parentElement
             filter_select = e.target.id
-            console.log(filter_select)
 
             if (filter_cats.includes(filter_select)){
-
                 const del_index = filter_cats.indexOf(filter_select);
-                const new_filter =filter_cats.splice(del_index, 1);
-                sessionDiv.classList.add("checked");
-                
+                const new_filter = filter_cats.splice(del_index, 1);
+                sessionDiv.classList.add("active");
+                parent_element.classList.add("active")
+                let ID_symbol = cats[i].concat("_symbol")
+                document.getElementById(ID_symbol).classList.add("active");
             }
             else{
                 const new_filter = filter_cats.push(filter_select)
                 sessionDiv.checked = false;
-                sessionDiv.classList.remove("checked");
+                sessionDiv.classList.remove("active");
+                parent_element.classList.remove("active")
+                let ID_symbol = cats[i].concat("_symbol")
+                document.getElementById(ID_symbol).classList.remove("active");
             }
+
+            console.log(filter_cats)
 
             if (filter_cats.length > 0){
                 map.setFilter('A-PrimStyle', ['match', ['get', 'SYMB_CLASS'], filter_cats,false,true]);
@@ -282,6 +289,44 @@ map.on('load', () => {
             }
         });
     }
+
+    // // CLICK TO FILTER (INTEGRATED INTO LEGEND) ---------------------------------------------------------------
+    // for (let i = 0; i < cats.length; i++) {
+
+    //     const hash = "#"
+    //     const ID_name = hash.concat(cats[i])
+    //     console.log(ID_name)
+
+    //     const sessionDiv = document.querySelector(ID_name);
+
+    //     console.log(sessionDiv)
+
+    //     sessionDiv.addEventListener('click', (e) => {
+    //         // console.log(e.srcElement)
+    //         filter_select = e.target.id
+    //         console.log(filter_select)
+
+    //         if (filter_cats.includes(filter_select)){
+
+    //             const del_index = filter_cats.indexOf(filter_select);
+    //             const new_filter =filter_cats.splice(del_index, 1);
+    //             sessionDiv.classList.add("checked");
+                
+    //         }
+    //         else{
+    //             const new_filter = filter_cats.push(filter_select)
+    //             sessionDiv.checked = false;
+    //             sessionDiv.classList.remove("checked");
+    //         }
+
+    //         if (filter_cats.length > 0){
+    //             map.setFilter('A-PrimStyle', ['match', ['get', 'SYMB_CLASS'], filter_cats,false,true]);
+    //         }
+    //         else{
+    //             map.setFilter('A-PrimStyle', null)
+    //         }
+    //     });
+    // }
 
 
 });

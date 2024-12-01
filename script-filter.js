@@ -245,7 +245,7 @@ map.on('load', () => {
     });
 
 
-    // CLICK TO FILTER (INTEGRATED INTO LEGEND) ---------------------------------------------------------------
+    // CLICK TO FILTER (STAND ALONE) ---------------------------------------------------------------
     for (let i = 0; i < cats.length; i++) {
 
         const symbol = cats[i]

@@ -13,6 +13,8 @@
 <link href="css/popup.css" rel="stylesheet" type="text/css">  
 <link href="css/filter.css" rel="stylesheet" type="text/css"> 
 <link href="css/var.css" rel="stylesheet" type="text/css"> 
+<link href="css/console.css" rel="stylesheet" type="text/css"> 
+<link href="css/toggle.css" rel="stylesheet" type="text/css"> 
 
 
 <style>
@@ -29,6 +31,75 @@ body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, s
 
 <!-- LEGEND -->
 
+
+<div class = "console">
+    <div class = "title-block">
+        <div class = "title">Agricultural Census 2021 Palo Verde Valley, CA</div>
+        <div class = "leg-line"></div>
+        <div class = "proj-des">California's Palo Verde Valley is on of the most arid aricultural regions in the United State. 
+            Irrigated exclusively by the Colorado River, the valley competes for river's limited supply.</div>
+        <!-- <p>Source: Global Power Dataset 1.3.0, World Resources Institue 2021.</p> -->
+        <br>
+        <div class = "proj-des">Source: Global Power Dataset 1.3.0, World Resources Institue 2021.</div>
+    </div>
+    <div class = "title-block">
+        <div class = "legend-label">Main Crops</div>
+        <div class = "legend" id = "toggle group">
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #efee3e;" id="C_symbol"></div>
+                <div class = "symbol-label active">Citrus</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "C"></div>
+                </div>
+            </div>
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #6abbc2;" id="F_symbol"></div>
+                <div class = "symbol-label active">Field Crop</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "F"></div>
+                </div>
+            </div>
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #4ff08b;" id="G_symbol"></div>
+                <div class = "symbol-label active">Grain</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "G"></div>
+                </div>
+            </div>
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #a6ff96;" id="P_symbol"></div>
+                <div class = "symbol-label active">Prarie Crops</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "P"></div>
+                </div>
+            </div>
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #23c79a;" id="T_symbol"></div>
+                <div class = "symbol-label active">Truck Crops & Berries</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "T"></div>
+                </div>
+            </div>
+
+            <div class = "legend-entry active">
+                <div class = "symbol active" style="background-color: #dbd1d1;" id="I_symbol"></div>
+                <div class = "symbol-label active">Idle Fields</div>
+                <div class = "toggle-space">
+                    <div class = "toggle active" id = "I"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 
 <div id='console'>
     <h1>Agricultural Census 2021 Palo Verde Valley, CA</h1>
     <p>California's Palo Verde Valley is on of the most arid aricultural regions in the United State. 
@@ -57,7 +128,7 @@ body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, s
     </div>
     
     
-</div>
+</div> -->
 
 <script src="script.js"></script>
  

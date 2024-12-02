@@ -44,7 +44,8 @@ h1 {
   .dot {
     height: 8px;
     width: 8px;
-    background-color: var(--ter_color);
+    /* background-color: var(--ter_color); */
+    background-color: red;
     border-radius: 50%;
     display: inline-block;
     margin-left: 2.5px;

@@ -1,9 +1,9 @@
 :root {
-    --bg_color: rgba(72, 72, 72, 0.94);
-    --prim_color: rgba(235, 235, 235, 1);
-    --sec_color: rgba(174, 174, 174, 1); 
+    --bg_color: rgba(224, 224, 217, 0.94);
+    --prim_color: rgba(51, 51, 51, 1);
+    --sec_color: rgba(130, 130, 130, 1); 
     --ter_color: rgb(141, 141, 141);
-    --highl_color: rgba(252, 87, 255, 0.807);
+    --highl_color: rgba(205, 51, 204, 0.807);
 
     --font_default: 400 14px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
   }

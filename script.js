@@ -10,8 +10,9 @@ const map = new mapboxgl.Map({
     container: 'map', // container ID
     // style: 'mapbox://styles/mapbox/streets-v12', // style URL
     style: 'mapbox://styles/ptrszkwcz/clq2frznh00cp01qmb1vce1kl',
-    center: [-114.64222994003272, 33.55], // starting position [lng, lat]
-    zoom: 10.3 // starting zoom
+    center: [-114.61, 33.62], // starting position [lng, lat]
+    zoom: 10.5, // starting zoom
+    bearing: 90
 });
 
 // Dont forget this part for Hover!
@@ -32,6 +33,27 @@ map.on('load', () => {
         'promoteId':'UniqueID' // Because mapbox fucks up when assigning IDs, make own IDs in QGIS and then set here!!!
     });
 
+    map.addSource('source-B', {
+        'type': 'vector',
+        'url': "mapbox://ptrszkwcz.cm47ssh8y076v1poc72s9cx5i-988dl",
+    });
+
+    map.addLayer({
+        'id': 'B-River',
+        'type': 'line',
+        'source': 'source-B', 
+        'source-layer':'ColoradoRiver_update',
+        'layout': {
+            'line-cap': 'round',
+        },
+        'paint': {
+            'line-blur': 2,
+            'line-color': '#7de0ff',
+            'line-opacity': 0.7,
+            'line-width': 7,
+            },
+    })
+
     map.addLayer({
         'id': 'A-PrimStyle',
         'type': 'fill',
@@ -40,12 +62,13 @@ map.on('load', () => {
         'layout': {},
         'paint': {
             'fill-color': [ 'match', ['get','SYMB_CLASS'],
-                'C', '#efee3e',
-                'F', '#6abbc2',
-                'G', '#4ff08b',
-                'I', '#dbd1d1',
-                'P', '#a6ff96',
-                'T', '#23c79a',
+                'C', '#ff911c',
+                'F', '#2fbf7a',
+                'G', '#efee3e',
+                'I', '#ffffff',
+                // 'I', '#dbd1d1',
+                'P', '#c0fcb6',
+                'T', '#c099ff',
                 '#000000'
                 ], 
                 'fill-opacity': 0.75,
